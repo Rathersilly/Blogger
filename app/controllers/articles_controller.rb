@@ -8,6 +8,8 @@ class ArticlesController < ApplicationController
 
   def show
     @article = Article.find(params[:id])
+    @article.views += 1
+    @article.save
 
     @comment = Comment.new
     @comment.article_id = @article.id
@@ -19,9 +21,10 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
+    @article.views = 0
     @article.save
 
-    flash.notice = "Article #{@article.id} ('#{@article.title}') Created!"
+    flash.notice = "Article #{@article.id} ('#{@article.title}') Created! #{@article.views} Views!}"
 
     redirect_to article_path(@article)
   end
